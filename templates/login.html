@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Here</title>
+</head>
+<body>
+    <form action="/home" method="post" id="loginForm">
+        <label for="username">Username : </label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password : </label>
+        <input type="text" name="password" id="password">
+        <input type="hidden" id="hiddenField" name="hiddenFieldUsed" value="false">
+        <button type="submit">Login</button>
+    </form>
+    <script>
+        // var element = document.getElementById("abc");
+        // element.onchange(myfunc())
+
+        //The reason for keeping keypress and typingdata separate as in typing data, we are using event listener as input which can even track auto completions and pasted content, if any.
+        let keypress_data = []
+        let typingData = []
+        let startTime = Date.now()
+        let backSpaceCount = 0;
+        let hiddenFieldUsed = false;
+
+
+        document.querySelectorAll('#username','#password').forEach((field) => {
+            field.addEventListener('keydown', (event) => {
+                keypress_data.push({
+                    key : event.key,
+                    type : 'Keydown',
+                    time : Date.now() - startTime
+                });
+                if(event.key === 'Backspace')
+                {
+                    backSpaceCount++;
+                }
+            });
+
+
+            field.addEventListener('keyup', (event) => {
+                keypress_data.push({
+                    key : event.key,
+                    type : 'Keyup',
+                    time : Date.now() - startTime
+                });
+            });
+
+            field.addEventListener('input', (event)=>{
+                typingData.push({
+                    key : event.data,
+                    type : 'Input',
+                    time : Date.now() - startTime
+                })
+            })
+        });
+
+        
+        
+        document.getElementById('hiddenField').addEventListener('change', ()=>{
+            hiddenFieldUsed = true;
+            document.getElementById('hiddenField').value = "true";
+        });
+
+
+        
+        
+        document.getElementById('loginForm').addEventListener('submit', async(event)=>{
+            event.preventDefault();  
+
+            console.log(typingData);
+            console.log(keypress_data);
+            console.log(backSpaceCount);
+            const formData = new FormData(document.getElementById('loginForm'));
+            const formDataObj = {};
+            
+            formDataObj["username"] = document.getElementById("username").value;
+            formDataObj["password"] = document.getElementById("password").value;
+            formDataObj["hiddenField"] = document.getElementById("hiddenField").value;
+
+            formDataObj.typingData = typingData;
+            formDataObj.keypressData = keypress_data;
+            formDataObj.backSpaceCount = backSpaceCount;
+            formDataObj.hiddenFieldUsed = hiddenFieldUsed;
+
+            try {
+                const response = await fetch("/home", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  
+                    },
+                    body: JSON.stringify(formDataObj)  
+                });
+
+                if (response.ok) {
+                    console.log(formDataObj)
+                    console.log('Data sent successfully');
+                } else {
+                    console.error('Error sending data');
+                 }
+            } catch (error) {
+                console.log("Error occurred in sending data to backend.");
+                console.log("Error: ", error);
+            }
+        });
+
+    </script>
+</body>
+</html>
