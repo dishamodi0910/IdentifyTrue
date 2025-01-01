@@ -185,7 +185,10 @@ def create_app(test_config=None):
         keypressData = data['keypressData'];
         backSpaceCount = data['backSpaceCount'];
         hiddenFieldUsed = data['hiddenFieldUsed'];
-        
+        innerHeight = data['innerHeight']
+        outerHeight = data['outerHeight']
+        innerWidth  = data['innerWidth']
+        outerWidth = data['outerWidth']
         print(f'MouseReadingsList Size: {len(mouse_readings)}');
         generate_graph(mouse_readings)
         
@@ -216,6 +219,12 @@ def create_app(test_config=None):
         print(f'hiddenFieldUsed : {hiddenFieldUsed}');
         calculateTypingSpeed(username, password)
         print(f"Typing Speed is : {typingSpeed}");
+
+        print(f"OuterWidth : {outerWidth}")
+        print(f"InnerWidth : {innerWidth}")
+        print(f"OuterHeight : {outerHeight}")
+        print(f"InnerHeight : {innerHeight}")
+
         return 'Tracking stopped.'
 
     return app

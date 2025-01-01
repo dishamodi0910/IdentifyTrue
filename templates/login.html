@@ -84,6 +84,10 @@
             formDataObj.keypressData = keypress_data;
             formDataObj.backSpaceCount = backSpaceCount;
             formDataObj.hiddenFieldUsed = hiddenFieldUsed;
+            formDataObj.innerHeight = window.innerHeight
+            formDataObj.innerWidth = window.innerWidth
+            formDataObj.outerHeight = window.outerHeight
+            formDataObj.outerWidth = window.outerWidth
 
             try {
                 const response = await fetch("/home", {
