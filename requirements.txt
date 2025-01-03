@@ -1,0 +1,7 @@
+pandas
+numpy
+matplotlib
+selenium
+pynput
+pymongo[srv]
+python-dotenv

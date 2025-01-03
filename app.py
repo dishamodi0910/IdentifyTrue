@@ -7,7 +7,11 @@ from pynput.mouse import Controller
 from threading import Thread
 import matplotlib.pyplot as plt
 import matplotlib
+from pymongo import MongoClient
+from dotenv import dotenv_values
+from flask_pymongo import PyMongo
 
+config = dotenv_values(".env")
 
 def findOutNumberOfSpacesInString(text):
     spaceCount = 0;
@@ -38,9 +42,6 @@ def generate_graph(mouse_readings):
     plt.ylabel('Y-Axis (Y)')
     plt.title('Plot of Coordinates')
     plt.savefig('fig.png')
-
-
-
 
 
 #DEAL WITH kEYSTROKE RELATED DATA
@@ -154,7 +155,9 @@ def track_behaviour(mouse):
 
 def create_app(test_config=None):
     app = Flask(__name__)
-
+    app.config["MONGO_URI"] = config.get("MONGO_URI")
+    print("Mongo URI is : ", config.get("MONGO_URI"))
+    mongo = PyMongo(app)
     @app.route('/hello')
     def hello():
         return render_template('hello.html')
@@ -219,13 +222,54 @@ def create_app(test_config=None):
         print(f'hiddenFieldUsed : {hiddenFieldUsed}');
         calculateTypingSpeed(username, password)
         print(f"Typing Speed is : {typingSpeed}");
-
         print(f"OuterWidth : {outerWidth}")
         print(f"InnerWidth : {innerWidth}")
         print(f"OuterHeight : {outerHeight}")
         print(f"InnerHeight : {innerHeight}")
+          
+        keystroke_data = {
+            "username": username,
+            "password": password,
+            "keypress_data": keypressData,
+            "typing_metrics": {
+                "typing_speed": typingSpeed,
+                "hold_time": {
+                    "all": holdTimeAll,
+                    "average": avgHoldTime,
+                    "min": minHoldTime,
+                    "max": maxHoldTime,
+                },
+                "keystroke_latency": {
+                    "all": keyStrokeLatencyAll,
+                    "average": avgKeyStrokeLatency,
+                    "min": minKeyStrokeLatency,
+                    "max": maxKeyStrokeLatency,
+                },
+                "digraph_duration": {
+                    "all": digraphDurationAll,
+                    "average": avgDiGraphDuration,
+                    "min": minDiGraphDuration,
+                    "max": maxDiGraphDuration,
+                },
+                "inter_release_latency": {
+                    "all": interReleaseLatencyAll,
+                    "average": avgInterReleaseLatency,
+                    "min": minInterReleaseLatency,
+                    "max": maxInterReleaseLatency,
+                },
+            },
+            "backspace_count": backSpaceCount,
+            "hidden_field_used": hiddenFieldUsed,
+            "inner_dimensions": {"width": innerWidth, "height": innerHeight},
+            "outer_dimensions": {"width": outerWidth, "height": outerHeight},
+        }
 
-        return 'Tracking stopped.'
+        try:
+            mongo.db.keystrokedata.insert_one(keystroke_data)
+            print("Keystroke data saved to MongoDB.")
+        except Exception as e:
+            print(f"Error inserting into MongoDB: {e}")
+            return "Error saving to db"
 
     return app
 
