@@ -5,3 +5,4 @@ selenium
 pynput
 pymongo[srv]
 python-dotenv
+chardet
