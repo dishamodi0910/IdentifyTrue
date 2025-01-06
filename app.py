@@ -10,6 +10,12 @@ import matplotlib
 from pymongo import MongoClient
 from dotenv import dotenv_values
 from flask_pymongo import PyMongo
+import sys
+import os
+
+
+utils_path = '/home/dishamodi0910/DEV/true-identify/utils'
+sys.path.append(os.path.dirname(utils_path))
 
 config = dotenv_values(".env")
 
