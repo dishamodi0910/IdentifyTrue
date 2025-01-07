@@ -6,4 +6,6 @@ pynput
 pymongo[srv]
 python-dotenv
 chardet
-setup tools
+setuptools
+dask
+pyarrow
