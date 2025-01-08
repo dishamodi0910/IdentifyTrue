@@ -1,6 +1,5 @@
 from asyncio import sleep
 import asyncio
-import os
 from flask import Flask, Response, request, render_template
 from pynput import mouse
 from pynput.mouse import Controller
@@ -128,24 +127,25 @@ def generate_dynamics():
 def calculateTypingSpeed(username, password):
     global generate_keywise_times
     global typingSpeed
-    totalWordsTyped = 0
+    totalCharsTyped = 0
     #Typing Speed will be total time taken/Total characters written
-    spacesUsername = findOutNumberOfSpacesInString(username)
-    spacesPassword = findOutNumberOfSpacesInString(password)
-    if(spacesUsername > 0):
-        wordsInUserName = len(username.split(' '))
-        totalWordsTyped = totalWordsTyped + wordsInUserName + spacesUsername
-    else:
-        totalWordsTyped = totalWordsTyped + 1
+    # spacesUsername = findOutNumberOfSpacesInString(username)
+    # spacesPassword = findOutNumberOfSpacesInString(password)
+    # if(spacesUsername > 0):
+    #     wordsInUserName = len(username.split(' '))
+    #     totalWordsTyped = totalWordsTyped + wordsInUserName + spacesUsername
+    # else:
+    #     totalWordsTyped = totalWordsTyped + 1
 
 
-    if(spacesPassword > 0):
-        wordsInPassword = len(password.split(' '))
-        totalWordsTyped = totalWordsTyped + wordsInPassword + spacesPassword
-    else:
-        totalWordsTyped = totalWordsTyped + 1
-    totalTimeTaken = (generate_keywise_times[len(generate_keywise_times) - 1]['keyReleaseTime'] - generate_keywise_times[0]['keyPresssTime'])*1.0/60000
-    typingSpeed = (totalWordsTyped)/totalTimeTaken
+    # if(spacesPassword > 0):
+    #     wordsInPassword = len(password.split(' '))
+    #     totalWordsTyped = totalWordsTyped + wordsInPassword + spacesPassword
+    # else:
+    #     totalWordsTyped = totalWordsTyped + 1
+    totalCharsTyped = len(username) + len(password);
+    totalTimeTaken = (generate_keywise_times[len(generate_keywise_times) - 1]['keyReleaseTime'] - generate_keywise_times[0]['keyPresssTime'])*1.0;
+    typingSpeed = (totalTimeTaken)/totalCharsTyped;
     return typingSpeed
 
 
@@ -237,8 +237,9 @@ def create_app(test_config=None):
             "username": username,
             "password": password,
             "keypress_data": keypressData,
+            "Typing Speed" : typingSpeed,
+            "No of Backspaces" : backSpaceCount,
             "typing_metrics": {
-                "typing_speed": typingSpeed,
                 "hold_time": {
                     "all": holdTimeAll,
                     "average": avgHoldTime,
@@ -264,14 +265,42 @@ def create_app(test_config=None):
                     "max": maxInterReleaseLatency,
                 },
             },
-            "backspace_count": backSpaceCount,
             "hidden_field_used": hiddenFieldUsed,
             "inner_dimensions": {"width": innerWidth, "height": innerHeight},
             "outer_dimensions": {"width": outerWidth, "height": outerHeight},
         }
 
+        keystrokes_data_small = {
+            "Typing Speed" : typingSpeed,
+            "No of Backspaces" : backSpaceCount,
+            "Avg Hold Time" : avgHoldTime,
+            "Max Hold Time" : maxHoldTime,
+            "Min Hold Time" : minHoldTime,
+            "Avg Keystroke Latency" : avgKeyStrokeLatency,
+            "Max Keystroke Latency" : maxKeyStrokeLatency,
+            "Min Keystroke Latency" : minKeyStrokeLatency,
+            "Avg Digraph Duration" : avgDiGraphDuration,
+            "Max Digraph Duration" : maxDiGraphDuration,
+            "Min Digraph Duration" : minDiGraphDuration,
+            "Avg Inter-Release Latency" : avgInterReleaseLatency,
+            "Max Inter-Release Latency" : maxInterReleaseLatency,
+            "Min Inter-Release Latency" : minInterReleaseLatency,
+            "output_label" : 0
+        }
+
+        dimensions_honeypot_info = {
+            "innerWidth"  :  innerWidth,
+            "innerHeight" : innerHeight,
+            "outerWidth" : outerWidth,
+            "outerHeight" : outerHeight,
+            "hidden_field_used" : hiddenFieldUsed,
+            "output_label" : 0
+        }
+
         try:
             mongo.db.keystrokedata.insert_one(keystroke_data)
+            mongo.db.keystrokes_bot.insert_one(keystrokes_data_small)
+            mongo.db.dimensions_bot.insert_one(dimensions_honeypot_info)
             print("Keystroke data saved to MongoDB.")
         except Exception as e:
             print(f"Error inserting into MongoDB: {e}")

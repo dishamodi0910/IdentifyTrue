@@ -8,8 +8,8 @@ username_password = []
 def generateBotUserNamePassword():
     for i in range(0,100):
         lengthCollection = len(collection)
-        lenUserName = random.randint(1,10)
-        lenPassword = random.randint(1,10)
+        lenUserName = random.randint(5,10)
+        lenPassword = random.randint(5,10)
         username = ""
         password = ""
         for i in range(0,lenUserName):
