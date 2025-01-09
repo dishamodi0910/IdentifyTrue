@@ -6,7 +6,7 @@ collection = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
 username_password = []
 
 def generateBotUserNamePassword():
-    for i in range(0,100):
+    for i in range(0,75):
         lengthCollection = len(collection)
         lenUserName = random.randint(5,10)
         lenPassword = random.randint(5,10)

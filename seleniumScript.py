@@ -38,16 +38,16 @@ def process_batch(batch):
     driver.quit()
 
 def processCSV():
-    credentials = pd.read_csv(CSV_FILE_PATH, chunksize=BATCH_SIZE)
-    processes = []
+    credentials = pd.read_csv(CSV_FILE_PATH)
+    # processes = []
 
-    for chunk in credentials:
-        process = multiprocessing.Process(target=process_batch, args=(chunk,))
-        processes.append(process)
-        process.start()
+    # for chunk in credentials:
+    #     process = multiprocessing.Process(target=process_batch, args=(chunk,))
+    #     processes.append(process)
+    #     process.start()
     
-    for process in processes:
-        process.join()
-
+    # for process in processes:
+    #     process.join()
+    process_batch(credentials)
 
 processCSV()
