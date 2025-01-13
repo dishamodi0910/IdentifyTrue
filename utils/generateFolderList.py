@@ -1,7 +1,5 @@
 from pathlib import Path
 
-parent_dir = Path('/path/to/your/folder')
-
 def findSubFolders(folder_path):
     subfolder_list = []
     parent_dir = Path(folder_path)

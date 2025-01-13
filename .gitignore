@@ -24,3 +24,8 @@ Keystroke_3/
 Keystroke_4/
 Keystroke_5/
 utils/__pycache__
+
+mouse_dataset_raw/
+mouse_dataset/
+
+fig.png
