@@ -14,9 +14,9 @@ def generateGraph(coordinatesX, coordinatesY, isHuman):
         os.makedirs("mouse_dataset")
     generated_uuid = uuid.uuid4()
     if isHuman == 1:
-        file_name = f"mouse_dataset/human_{generated_uuid}.png"
+        file_name = f"mouse_dataset/human/human_{generated_uuid}.png"
     else:
-        file_name = f"mouse_dataset/bot_{generated_uuid}.png"
+        file_name = f"mouse_dataset/bot/bot_{generated_uuid}.png"
 
     plt.savefig(file_name)
     plt.close()  
@@ -58,8 +58,9 @@ def processSubFolder(folderPath):
                     coordinatesY.append((float(coordinates[-1]))*1.0/float(resolutionY))
 
         
-            print(coordinatesX)
-            print(coordinatesY)
+            # print(coordinatesX)
+            # print(coordinatesY)
+            print("Processed file : ", file)
             generateGraph(coordinatesX, coordinatesY, isHuman)
 
 
