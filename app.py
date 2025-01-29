@@ -263,78 +263,78 @@ def create_app(test_config=None):
         print(f"OuterHeight : {outerHeight}")
         print(f"InnerHeight : {innerHeight}")
           
-        # keystroke_data = {
-        #     "username": username,
-        #     "password": password,
-        #     "keypress_data": keypressData,
-        #     "Typing Speed" : typingSpeed,
-        #     "No of Backspaces" : backSpaceCount,
-        #     "typing_metrics": {
-        #         "hold_time": {
-        #             "all": holdTimeAll,
-        #             "average": avgHoldTime,
-        #             "min": minHoldTime,
-        #             "max": maxHoldTime,
-        #         },
-        #         "keystroke_latency": {
-        #             "all": keyStrokeLatencyAll,
-        #             "average": avgKeyStrokeLatency,
-        #             "min": minKeyStrokeLatency,
-        #             "max": maxKeyStrokeLatency,
-        #         },
-        #         "digraph_duration": {
-        #             "all": digraphDurationAll,
-        #             "average": avgDiGraphDuration,
-        #             "min": minDiGraphDuration,
-        #             "max": maxDiGraphDuration,
-        #         },
-        #         "inter_release_latency": {
-        #             "all": interReleaseLatencyAll,
-        #             "average": avgInterReleaseLatency,
-        #             "min": minInterReleaseLatency,
-        #             "max": maxInterReleaseLatency,
-        #         },
-        #     },
-        #     "hidden_field_used": hiddenFieldUsed,
-        #     "inner_dimensions": {"width": innerWidth, "height": innerHeight},
-        #     "outer_dimensions": {"width": outerWidth, "height": outerHeight},
-        # }
+        keystroke_data = {
+            "username": username,
+            "password": password,
+            "keypress_data": keypressData,
+            "Typing Speed" : typingSpeed,
+            "No of Backspaces" : backSpaceCount,
+            "typing_metrics": {
+                "hold_time": {
+                    "all": holdTimeAll,
+                    "average": avgHoldTime,
+                    "min": minHoldTime,
+                    "max": maxHoldTime,
+                },
+                "keystroke_latency": {
+                    "all": keyStrokeLatencyAll,
+                    "average": avgKeyStrokeLatency,
+                    "min": minKeyStrokeLatency,
+                    "max": maxKeyStrokeLatency,
+                },
+                "digraph_duration": {
+                    "all": digraphDurationAll,
+                    "average": avgDiGraphDuration,
+                    "min": minDiGraphDuration,
+                    "max": maxDiGraphDuration,
+                },
+                "inter_release_latency": {
+                    "all": interReleaseLatencyAll,
+                    "average": avgInterReleaseLatency,
+                    "min": minInterReleaseLatency,
+                    "max": maxInterReleaseLatency,
+                },
+            },
+            "hidden_field_used": hiddenFieldUsed,
+            "inner_dimensions": {"width": innerWidth, "height": innerHeight},
+            "outer_dimensions": {"width": outerWidth, "height": outerHeight},
+        }
 
-        # keystrokes_data_small = {
-        #     "Typing Speed" : typingSpeed,
-        #     "No of Backspaces" : backSpaceCount,
-        #     "Avg Hold Time" : avgHoldTime,
-        #     "Max Hold Time" : maxHoldTime,
-        #     "Min Hold Time" : minHoldTime,
-        #     "Avg Keystroke Latency" : avgKeyStrokeLatency,
-        #     "Max Keystroke Latency" : maxKeyStrokeLatency,
-        #     "Min Keystroke Latency" : minKeyStrokeLatency,
-        #     "Avg Digraph Duration" : avgDiGraphDuration,
-        #     "Max Digraph Duration" : maxDiGraphDuration,
-        #     "Min Digraph Duration" : minDiGraphDuration,
-        #     "Avg Inter-Release Latency" : avgInterReleaseLatency,
-        #     "Max Inter-Release Latency" : maxInterReleaseLatency,
-        #     "Min Inter-Release Latency" : minInterReleaseLatency,
-        #     "output_label" : 0
-        # }
+        keystrokes_data_small = {
+            "Typing Speed" : typingSpeed,
+            "No of Backspaces" : backSpaceCount,
+            "Avg Hold Time" : avgHoldTime,
+            "Max Hold Time" : maxHoldTime,
+            "Min Hold Time" : minHoldTime,
+            "Avg Keystroke Latency" : avgKeyStrokeLatency,
+            "Max Keystroke Latency" : maxKeyStrokeLatency,
+            "Min Keystroke Latency" : minKeyStrokeLatency,
+            "Avg Digraph Duration" : avgDiGraphDuration,
+            "Max Digraph Duration" : maxDiGraphDuration,
+            "Min Digraph Duration" : minDiGraphDuration,
+            "Avg Inter-Release Latency" : avgInterReleaseLatency,
+            "Max Inter-Release Latency" : maxInterReleaseLatency,
+            "Min Inter-Release Latency" : minInterReleaseLatency,
+            "output_label" : 0
+        }
 
-        # dimensions_honeypot_info = {
-        #     "innerWidth"  :  innerWidth,
-        #     "innerHeight" : innerHeight,
-        #     "outerWidth" : outerWidth,
-        #     "outerHeight" : outerHeight,
-        #     "hidden_field_used" : hiddenFieldUsed,
-        #     "output_label" : 0
-        # }
+        dimensions_honeypot_info = {
+            "innerWidth"  :  innerWidth,
+            "innerHeight" : innerHeight,
+            "outerWidth" : outerWidth,
+            "outerHeight" : outerHeight,
+            "hidden_field_used" : hiddenFieldUsed,
+            "output_label" : 0
+        }
 
-        # try:
-        #     mongo.db.keystrokedata.insert_one(keystroke_data)
-        #     mongo.db.keystrokes_bot.insert_one(keystrokes_data_small)
-        #     mongo.db.dimensions_bot.insert_one(dimensions_honeypot_info)
-        #     print("Keystroke data saved to MongoDB.")
-        # except Exception as e:
-        #     print(f"Error inserting into MongoDB: {e}")
-        #     return "Error saving to db"
+        try:
+            mongo.db.keystrokedata.insert_one(keystroke_data)
+            mongo.db.keystrokes_bot.insert_one(keystrokes_data_small)
+            mongo.db.dimensions_bot.insert_one(dimensions_honeypot_info)
+            print("Keystroke data saved to MongoDB.")
+        except Exception as e:
+            print(f"Error inserting into MongoDB: {e}")
+            return "Error saving to db"
 
     return app
 
