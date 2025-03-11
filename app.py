@@ -14,7 +14,14 @@ import sys
 import os
 from utils import blackListUA, processUA
 from utils import readFromDB
-from utils.prepareInput import prepare_keystroke_input
+from utils.prepareInput import prepare_keystroke_input, prepare_mouse_analysis_input
+import pandas as pd
+import numpy as np
+import torch
+from PIL import Image
+from torchvision import models
+from torchvision import transforms
+import torch.nn as nn
 
 utils_path = '/home/dishamodi0910/DEV/true-identify/utils'
 sys.path.append(os.path.dirname(utils_path))
@@ -22,7 +29,6 @@ sys.path.append(os.path.dirname(utils_path))
 config = dotenv_values(".env")
 
 keystroke_model = joblib.load("model/best_keystroke_model.joblib");
-
 
 def findOutNumberOfSpacesInString(text):
     spaceCount = 0;
@@ -216,7 +222,6 @@ def create_app(test_config=None):
         tracking_thread.daemon = True  
         tracking_thread.start()
 
-        #print("We are here");
         return render_template('login.html');
 
     @app.route('/home', methods=['POST'])
@@ -234,6 +239,7 @@ def create_app(test_config=None):
         # innerWidth  = data['innerWidth']
         # outerWidth = data['outerWidth']
         print(f'MouseReadingsList Size: {len(mouse_readings)}');
+
         generate_graph(mouse_readings)
         
         print(f'Username : {username}');
@@ -305,24 +311,9 @@ def create_app(test_config=None):
         #     "outer_dimensions": {"width": outerWidth, "height": outerHeight},
         # }
 
-        keystrokes_data_small = {
-            "Typing Speed" : typingSpeed,
-            "No of Backspaces" : backSpaceCount,
-            "Avg Hold Time" : avgHoldTime,
-            "Max Hold Time" : maxHoldTime,
-            "Min Hold Time" : minHoldTime,
-            "Avg Keystroke Latency" : avgKeyStrokeLatency,
-            "Max Keystroke Latency" : maxKeyStrokeLatency,
-            "Min Keystroke Latency" : minKeyStrokeLatency,
-            "Avg Digraph Duration" : avgDiGraphDuration,
-            "Max Digraph Duration" : maxDiGraphDuration,
-            "Min Digraph Duration" : minDiGraphDuration,
-            "Avg Inter-Release Latency" : avgInterReleaseLatency,
-            "Max Inter-Release Latency" : maxInterReleaseLatency,
-            "Min Inter-Release Latency" : minInterReleaseLatency,
-            # "output_label" : 0
-        }
 
+        keystroke_data = np.array([typingSpeed, backSpaceCount, avgHoldTime, maxHoldTime, minHoldTime, avgKeyStrokeLatency, maxKeyStrokeLatency, minKeyStrokeLatency, avgDiGraphDuration, maxDiGraphDuration, minDiGraphDuration, avgInterReleaseLatency, maxInterReleaseLatency, minInterReleaseLatency])
+        
         # dimensions_honeypot_info = {
         #     "innerWidth"  :  innerWidth,
         #     "innerHeight" : innerHeight,
@@ -341,11 +332,56 @@ def create_app(test_config=None):
         #     print(f"Error inserting into MongoDB: {e}")
         #     return "Error saving to db"
 
-        input_keystrokes_formatted = prepare_keystroke_input(keystrokes_data_small)
-        predicted_keystroke_result = keystroke_model.predict(input_keystrokes_formatted)
-        print("Predicted Keystroke Result : ", predicted_keystroke_result)
+        request_response = -1
+        mouse_analysis_response = -1
+        keystroke_analysis_response = -1
 
-        input_mouseanalysis_formatted = prepare_mouse_analysis_input()
+
+        if (hiddenFieldUsed || isMaliciousIP || isMaliciousReferrer || isMaliciousUA)
+        {
+            request_response = 0
+            mouse_analysis_response = 0
+            keystroke_analysis_response = 0
+        }
+        else
+        {
+        
+        }
+        
+        input_keystrokes_formatted = prepare_keystroke_input(keystroke_data)
+        print("Input formatted strokes : ", input_keystrokes_formatted)
+        input_keystrokes_formatted = input_keystrokes_formatted.reshape(1,-1);
+        print("Input keystroke reshaped : ", input_keystrokes_formatted);
+        predicted_keystroke_result = keystroke_model.predict(input_keystrokes_formatted)
+         # print("Predicted Keystroke Result : ", predicted_keystroke_result)
+
+        mouse_prediction_result = -1
+
+        img_path = "fig.png"
+        image = Image.open(img_path)
+        image = image.convert("RGB")
+
+        model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT)
+        num_features = model.classifier[1].in_features
+        model.classifier[1] = nn.Linear(num_features, 2)  
+        model.load_state_dict(torch.load('model\mouse_trajectory_model.pth', map_location=torch.device('cpu')))
+        model.eval()  
+
+        input_image = prepare_mouse_analysis_input(image)
+        with torch.no_grad():
+            output = model(input_image)
+            _, predicted = torch.max(output, 1)
+
+            predicted = predicted.numpy()
+            mouse_prediction_result = predicted[0]
+                # print("Mouse Prediction Result : ", mouse_prediction_result)
+
+        result = {
+            'mouse_prediction_result' : "Bot" if mouse_prediction_result == 1 else "Human",
+            'keystroke_prediction_result' : "Bot" if predicted_keystroke_result == 0 else "Human"
+        }
+        print(result)
+        return render_template('result.html', result=result)
 
     return app
 

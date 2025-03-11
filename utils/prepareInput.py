@@ -13,7 +13,7 @@ def prepare_keystroke_input(data):
     ]
    input_data = pd.DataFrame([data], columns=features)
    input_data = logTransform(input_data)
-   input_data = yeoJohnsonTransform(input_data)
+   # input_data = yeoJohnsonTransform(input_data)
 
    return data
 
