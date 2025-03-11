@@ -28,3 +28,7 @@ utils/__pycache__
 mouse_dataset_raw/
 
 fig.png
+
+cypress/node_modules
+
+

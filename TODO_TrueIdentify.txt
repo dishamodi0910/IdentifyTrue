@@ -1,0 +1,6 @@
+=> TODOs of TrueIdentify : 
+
+Session creation
+CNN finetuning
+
+Research paper update with CNN, Session and Decision Tree Classifier

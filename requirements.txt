@@ -1,4 +1,4 @@
-flask
+Flask
 pandas
 numpy
 matplotlib
@@ -11,3 +11,12 @@ setuptools
 dask
 pyarrow
 joblib
+keyboard
+scikit-learn
+seaborn
+Flask-PyMongo
+scipy
+keras-tuner
+torch 
+torchvision 
+tqdm 

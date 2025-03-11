@@ -1,14 +1,11 @@
 import pandas as pd
 
 CSV_FILES_PATHS = [
-    "/home/dishamodi0910/DEV/true-identify/keystroke_1.csv",
-    "/home/dishamodi0910/DEV/true-identify/keystroke_2.csv",
-    "/home/dishamodi0910/DEV/true-identify/keystroke_3.csv",
-    "/home/dishamodi0910/DEV/true-identify/keystroke_4.csv",
-    "/home/dishamodi0910/DEV/true-identify/keystroke_dataset_processed/keystroke_5.csv",
+  "/home/dishamodi0910/DEV/true-identify/keystroke_pynput_bot_combined.csv",
+  "/home/dishamodi0910/DEV/true-identify/keystroke_human_bot_latest.csv"
 ]
 
-OUTPUT_FILE = "/home/dishamodi0910/DEV/true-identify/keystroke_data.csv"
+OUTPUT_FILE = "/home/dishamodi0910/DEV/true-identify/keystroke_human_bot_data_latest.csv"
 
 
 def mergeCSVs_in_chunks():
