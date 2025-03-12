@@ -336,17 +336,6 @@ def create_app(test_config=None):
         mouse_analysis_response = -1
         keystroke_analysis_response = -1
 
-
-        if (hiddenFieldUsed || isMaliciousIP || isMaliciousReferrer || isMaliciousUA)
-        {
-            request_response = 0
-            mouse_analysis_response = 0
-            keystroke_analysis_response = 0
-        }
-        else
-        {
-        
-        }
         
         input_keystrokes_formatted = prepare_keystroke_input(keystroke_data)
         print("Input formatted strokes : ", input_keystrokes_formatted)
@@ -380,6 +369,22 @@ def create_app(test_config=None):
             'mouse_prediction_result' : "Bot" if mouse_prediction_result == 1 else "Human",
             'keystroke_prediction_result' : "Bot" if predicted_keystroke_result == 0 else "Human"
         }
+
+         if (hiddenFieldUsed || isMaliciousIP || isMaliciousReferrer || isMaliciousUA)
+        {
+            request_response = 0
+            mouse_analysis_response = 0
+            keystroke_analysis_response = 0
+        }
+        else
+        {
+            request_response = 0.5
+            mouse_analysis_response = 1 - mouse_prediction_result
+            keystroke_analysis_response = keystroke_analysis_response
+        }
+
+        final_conclusion = ( request_response + mouse_analysis_response + keystroke_analysis_response ) / 3.0;
+
         print(result)
         return render_template('result.html', result=result)
 
