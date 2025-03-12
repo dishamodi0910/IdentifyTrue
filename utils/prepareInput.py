@@ -1,4 +1,3 @@
-import torch
 import torchvision.transforms as transforms
 import pandas as pd
 from utils import yeoJohnsonTransform
@@ -8,7 +7,7 @@ def prepare_keystroke_input(data):
    features = [
         "Typing Speed", "No of Backspaces",
         "Avg Hold Time", "Max Hold Time", "Min Hold Time",
-        "Avg Keystroke Latency", "Max Keystroke Latency", "Min Keystroke Latency",
+        "Avg Keystroke Latency", "Max Kehf -dystroke Latency", "Min Keystroke Latency",
         "Avg Digraph Duration", "Max Digraph Duration", "Min Digraph Duration",
         "Avg Inter-Release Latency", "Max Inter-Release Latency", "Min Inter-Release Latency"
     ]

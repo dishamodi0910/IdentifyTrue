@@ -17,6 +17,5 @@ seaborn
 Flask-PyMongo
 scipy
 keras-tuner
-torch 
 torchvision 
 tqdm 
