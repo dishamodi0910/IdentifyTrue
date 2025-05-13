@@ -55,7 +55,7 @@ The system implements a multi-modal behavioral analysis pipeline to distinguish 
 
 ## 📌 Dataset Information
  - Keystroke Dynamics Dataset: <a href="https://huggingface.co/datasets/dishamodi/Keystroke_Processed">Custom Generated Dataset</a>
- - Mouse Trajectories Dataset: <a href="https://huggingface.co/datasets/dishamodi/Keystroke_Processed">Custom Generated Dataset</a>
+ - Mouse Trajectories Dataset: <a href="https://huggingface.co/datasets/dishamodi/mouse-dynamics">Custom Generated Dataset</a>
 
 ---
 
